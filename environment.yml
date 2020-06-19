@@ -1,0 +1,21 @@
+name: SDITAA
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7
+  - anaconda
+  - matplotlib
+  - numpy
+  - scipy
+  - jupyterlab
+  - jupyter
+  - pandas
+  - requests
+  - seaborn
+  - pandas
+  - beautifulsoup4
+  - pip
+  - pip:
+      # Install regular pip packages
+      - TLE-tools
