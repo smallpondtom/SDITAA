@@ -11,6 +11,7 @@ dependencies:
   - jupyterlab
   - jupyter
   - pandas
+  - selenium
   - requests
   - seaborn
   - pandas
