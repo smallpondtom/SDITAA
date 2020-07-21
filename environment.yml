@@ -11,6 +11,7 @@ dependencies:
   - jupyterlab
   - jupyter
   - pandas
+  - openpyxl
   - selenium
   - requests
   - seaborn
@@ -20,3 +21,4 @@ dependencies:
   - pip:
       # Install regular pip packages
       - TLE-tools
+      - sgp4
