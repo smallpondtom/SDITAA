@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import numpy as np
+import json
+import pandas as pd
 
 class GETTLE:
 
@@ -36,6 +38,7 @@ class GETTLE:
         self.epoch_range = epoch_range
         if order is None: self.order = ['NORAD_CAT_ID', 'EPOCH']
         self.data_format = data_format
+        self.raw_tle = None
 
     def request_data(self):
         """
@@ -84,6 +87,7 @@ class GETTLE:
                          'EPOCH/' + str(self.epoch_range) + '/orderby/' +
                          str(combined_order) + '/format/' + str(self.data_format))
             TLE_data_page = client.get(api_query)
+            self.raw_tle = TLE_data_page  # store the raw TLE data from requests to use for other stuff
             soup = bs(TLE_data_page.text, 'html.parser')
 
             TLE_data_1string = str(soup.text)
@@ -93,7 +97,35 @@ class GETTLE:
 
             return np.asarray(TLE_data, dtype=str)
 
+    def tle2excel(self, file_name: str):
+        """
+        Function to convert TLE raw data to excel file
+        :param file_name: the file name of the excel file
+        :return: none
+        """
+
+        TLE_data_response = self.raw_tle  # get the raw data as a response
+        TLE_data_json = json.load(TLE_data_response.text)  # load it to json
+
+        # Remove the TLE string lines inside the data that hinders the program from converting the data to an excel file
+        # Function to be mapped to delete unnecessary keys inside each dictionary inside the list
+        def remove_TLE_keys(data_dict):
+            del data_dict['TLE_LINE0']
+            del data_dict['TLE_LINE1']
+            del data_dict['TLE_LINE2']
+            return data_dict
+
+        # Remove a certain key insdie the dictionary which is inside a list
+        TLE_data_json = map(remove_TLE_keys, TLE_data_json)
+        # Map the operation for all the dictionaries inside the list
+        TLE_data_modified_list = list(TLE_data_json)
+        # Convert the list with dictionaries into a pandas dataframe and convert that to an excel file
+        df = pd.DataFrame(TLE_data_modified_list)
+        df.to_excel(file_name)
+
 # Test code
+# username = input("Enter your space-track.org username -> )
+# password = input("Enter your space-track.org password -> )
 # get_tle = GETTLE(un='', pw='')
 # TLE_data = get_tle.request_data()
 # print(TLE_data)
