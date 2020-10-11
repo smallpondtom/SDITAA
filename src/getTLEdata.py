@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import numpy as np
 
-class getTLE:
+class GETTLE:
 
     """
     Class to retrieve 3LE data from space-track.org
@@ -94,6 +94,6 @@ class getTLE:
             return np.asarray(TLE_data, dtype=str)
 
 # Test code
-# get_tle = getTLE(un='smallpond.eng.tom@gmail.com', pw='svG*kfr6LB5zUyL')
+# get_tle = GETTLE(un='', pw='')
 # TLE_data = get_tle.request_data()
 # print(TLE_data)
