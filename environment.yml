@@ -17,8 +17,11 @@ dependencies:
   - seaborn
   - pandas
   - beautifulsoup4
+  - ffmpeg
   - pip
   - pip:
       # Install regular pip packages
       - TLE-tools
       - sgp4
+      - mypy
+      - nptyping
