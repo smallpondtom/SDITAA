@@ -1,3 +1,12 @@
+"""
+ ___________   _________     _____________   ______________    ______            ______
+|^^^^^______| |   ___   >\  |_____   _____| |_____    _____|  /< __ >\          /> __ <\
+|    |______  |  |   \   >\      |   |           |    |      /> |__| <\        /< |__| >\
+|_______    | |  |    |  >|      |   |           |    |     /< ______ >\      /> ______ <\
+ ______|    | |  |___/   >/  ____|   |____       |    |    /> |      | <\    /< |      | >\
+|___________| |_________>/  |_____________|      |____|   /<__|      |__>\  />__|      |__<\
+
+"""
 import requests
 from bs4 import BeautifulSoup as bs
 import numpy as np
@@ -123,9 +132,12 @@ class GETTLE:
         df = pd.DataFrame(TLE_data_modified_list)
         df.to_excel(file_name)
 
-# Test code
-# username = input("Enter your space-track.org username -> )
-# password = input("Enter your space-track.org password -> )
-# get_tle = GETTLE(un='', pw='')
-# TLE_data = get_tle.request_data()
-# print(TLE_data)
+def main():
+    # Test code
+    username = input("Enter your space-track.org username -> ")
+    password = input("Enter your space-track.org password -> ")
+    get_tle = GETTLE(un=username, pw=password)
+    TLE_data = get_tle.request_data()
+    print(TLE_data)
+
+if __name__ == '__main__': main()

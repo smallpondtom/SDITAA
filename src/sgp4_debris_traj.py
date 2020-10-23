@@ -1,6 +1,6 @@
 """
  ___________   _________     _____________   ______________    ______            ______
-|     ______| |   ___   >\  |_____   _____| |_____    _____|  /< __ >\          /> __ <\
+|^^^^^______| |   ___   >\  |_____   _____| |_____    _____|  /< __ >\          /> __ <\
 |    |______  |  |   \   >\      |   |           |    |      /> |__| <\        /< |__| >\
 |_______    | |  |    |  >|      |   |           |    |     /< ______ >\      /> ______ <\
  ______|    | |  |___/   >/  ____|   |____       |    |    /> |      | <\    /< |      | >\
@@ -189,9 +189,13 @@ def main():
 
     # Add custom date to conduct prediction
     ti = "2020-10-11 00:02:30"
-    tf = "2020-12-12 14:02:30"
+    tf = "2020-10-18 14:02:30"
     sgp4sim = SGP4PREDICT(tledata=TLE_sample, linespertle=3, start_date=ti, end_date=tf, interval="D")
     r, v = sgp4sim.run_sgp4()
     # sgp4sim.export_json() # test to see if data can be retrieved properly
+    i, j, k = r.shape
+    print(i,j,k)
+    print(r[0,:,:])
+    print(r[0,:,:].shape)
 
 if __name__ == '__main__': main()
