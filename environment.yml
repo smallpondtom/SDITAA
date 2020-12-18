@@ -10,7 +10,7 @@ dependencies:
   - scipy
   - jupyterlab
   - jupyter
-  - pandas
+  - cartopy
   - openpyxl
   - selenium
   - requests
