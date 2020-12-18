@@ -7,9 +7,12 @@
 |___________| |_________>/  |_____________|      |____|   /<__|      |__>\  />__|      |__<\
 
 """
+
 import numpy as np
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import cartopy.crs as ccrs 
+import cartopy.feature as cfeature
 from matplotlib.colors import cnames
 from matplotlib import animation
 from typing import List, Tuple
@@ -25,11 +28,25 @@ def SGP4GRAPHICS(positions: NDArray=None, velocities: NDArray=None):
     plt.clf()
     plt.gcf().canvas.mpl_connect('key_release_event',
                                  lambda event: [exit(0) if event.key == 'escape' else None])
+
     ax = fig.add_axes([0, 0, 1, 1], projection='3d')
     ax.axis('off')
 
     # Choose a different color for each trajectory
     colors = plt.cm.jet(np.linspace(0, 1, xsz))
+
+    ax1 = fig.add_axes([0,0,1,1])
+    galaxy_image = plt.imread('galaxy_image.jpg')
+    ax1.imshow(galaxy_image)
+    ax1.axis('off')
+
+
+    ax2 = fig.add_axes([0.37, 0.37, 0.3, 0.3], projection=ccrs.Orthographic(
+            central_latitude=0, central_longitude=0))
+    ax2.add_feature(cfeature.LAND)
+    ax2.add_feature(cfeature.COASTLINE)
+    ax2.add_feature(cfeature.OCEAN)
+    ax2.axis('off')
 
     # Set up lines and points
     lines = sum([ax.plot([], [], [], '-', c=c) for c in colors], [])
@@ -52,10 +69,10 @@ def SGP4GRAPHICS(positions: NDArray=None, velocities: NDArray=None):
     # Initialization of animation function which plots the background of each frame
     def animation_init():
         for line, pt in zip(lines, pts):
-            line.set_data([], [])
-            line.set_3d_properties([])
-            pt.set_data([], [])
-            pt.set_3d_properties([])
+            line.set_data(np.array([]), np.array([]))
+            line.set_3d_properties(np.zeros(0))
+            pt.set_data(np.array([]), np.array([]))
+            pt.set_3d_properties(np.array([]))
         return lines + pts
 
     # Animation function which update each frame with the data
@@ -67,17 +84,40 @@ def SGP4GRAPHICS(positions: NDArray=None, velocities: NDArray=None):
             line.set_3d_properties(z)
             pt.set_data(x[-1:], y[-1:])
             pt.set_3d_properties(z[-1:])
+ 
+        # Rotate view 
         ax.view_init(30, 0.3 * i)
+
         fig.canvas.draw()
         return lines + pts
+
+    def earth_animate(i):
+        lon = i
+        #ax2 = plt.gca()
+        #ax2.remove()
+        ax2 = plt.axes([0, 0, 0.5, 0.5], projection=ccrs.Orthographic(
+            central_latitude=0, central_longitude=lon))
+        ax2.add_feature(cfeature.LAND)
+        ax2.add_feature(cfeature.COASTLINE)
+        ax2.add_feature(cfeature.OCEAN)        
+        ax2.set_global()
+        ax2.coastlines()
+        return 
 
     # Instigate animator
     anim = animation.FuncAnimation(fig,
                                    func=animate,
                                    init_func=animation_init,
                                    frames=100, interval=50, blit=True)
-    anim.save('sampleDebris_interval-1MIN.mp4', fps=10, extra_args=['-vcodec', 'libx264'])
 
+    
+    """
+    anim_earth = animation.FuncAnimation(fig,
+                                         func=earth_animate,
+                                         frames=np.linspace(0, 360, 40),
+                                         interval=125, repeat=True)
+    #anim.save('sampleDebris_interval-1MIN.mp4', fps=10, extra_args=['-vcodec', 'libx264'])
+    """
     plt.show()
 
 
