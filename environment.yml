@@ -12,6 +12,7 @@ dependencies:
   - nptyping
   - seaborn
   - jupyterlab
+  - pip
   - pip:
     - astropy
     - mypy
