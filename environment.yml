@@ -12,6 +12,7 @@ dependencies:
   - nptyping
   - seaborn
   - jupyterlab
+  - cartopy
   - pip
   - pip:
     - mypy
